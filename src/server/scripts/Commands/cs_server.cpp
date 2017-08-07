@@ -22,16 +22,21 @@ Comment: All server related commands
 Category: commandscripts
 EndScriptData */
 
+#include "ScriptMgr.h"
 #include "Chat.h"
 #include "Config.h"
+#include "GameTime.h"
+#include "GitRevision.h"
 #include "Language.h"
+#include "Log.h"
 #include "ObjectAccessor.h"
 #include "Player.h"
-#include "ScriptMgr.h"
-#include "GitRevision.h"
-#include "Util.h"
-#include "GameTime.h"
+#include "RBAC.h"
+#include "ServerMotd.h"
 #include "UpdateTime.h"
+#include "Util.h"
+#include "World.h"
+#include "WorldSession.h"
 
 class server_commandscript : public CommandScript
 {
@@ -127,7 +132,7 @@ public:
     // Display the 'Message of the day' for the realm
     static bool HandleServerMotdCommand(ChatHandler* handler, char const* /*args*/)
     {
-        handler->PSendSysMessage(LANG_MOTD_CURRENT, sWorld->GetMotd());
+        handler->PSendSysMessage(LANG_MOTD_CURRENT, Motd::GetMotd());
         return true;
     }
 
@@ -249,7 +254,7 @@ public:
     // Define the 'Message of the day' for the realm
     static bool HandleServerSetMotdCommand(ChatHandler* handler, char const* args)
     {
-        sWorld->SetMotd(args);
+        Motd::SetMotd(args);
         handler->PSendSysMessage(LANG_MOTD_NEW, args);
         return true;
     }

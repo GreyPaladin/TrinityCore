@@ -19,7 +19,10 @@
 #ifndef SC_ESCORTAI_H
 #define SC_ESCORTAI_H
 
+#include "ScriptedCreature.h"
 #include "ScriptSystem.h"
+
+class Quest;
 
 #define DEFAULT_MAX_PLAYER_DISTANCE 50
 
@@ -62,7 +65,7 @@ struct TC_GAME_API npc_escortAI : public ScriptedAI
 
         void JustDied(Unit*) override;
 
-        void JustRespawned() override;
+        void JustAppeared() override;
 
         void ReturnToLastPoint();
 
@@ -88,7 +91,7 @@ struct TC_GAME_API npc_escortAI : public ScriptedAI
         virtual void WaypointReached(uint32 pointId) = 0;
         virtual void WaypointStart(uint32 /*pointId*/) { }
 
-        void Start(bool isActiveAttacker = true, bool run = false, ObjectGuid playerGUID = ObjectGuid::Empty, Quest const* quest = NULL, bool instantRespawn = false, bool canLoopPath = false, bool resetWaypoints = true);
+        void Start(bool isActiveAttacker = true, bool run = false, ObjectGuid playerGUID = ObjectGuid::Empty, Quest const* quest = nullptr, bool instantRespawn = false, bool canLoopPath = false, bool resetWaypoints = true);
 
         void SetRun(bool on = true);
         void SetEscortPaused(bool on);
@@ -104,9 +107,10 @@ struct TC_GAME_API npc_escortAI : public ScriptedAI
         bool GetAttack() const { return m_bIsActiveAttacker; }//used in EnterEvadeMode override
         void SetCanAttack(bool attack) { m_bIsActiveAttacker = attack; }
         ObjectGuid GetEventStarterGUID() const { return m_uiPlayerGUID; }
+        virtual bool IsEscortNPC(bool isEscorting) const override;
 
     protected:
-        Player* GetPlayerForEscort() { return ObjectAccessor::GetPlayer(*me, m_uiPlayerGUID); }
+        Player* GetPlayerForEscort();
 
     private:
         bool AssistPlayerInCombatAgainst(Unit* who);
