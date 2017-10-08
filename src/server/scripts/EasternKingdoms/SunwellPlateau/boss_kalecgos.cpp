@@ -160,7 +160,7 @@ struct boss_kalecgos : public BossAI
         events.ScheduleEvent(EVENT_CHECK_TIMER, Seconds(1));
     }
 
-    void EnterEvadeMode(EvadeReason /*why*/)
+    void EnterEvadeMode(EvadeReason /*why*/) override
     {
         if (events.IsInPhase(PHASE_OUTRO))
             return;
@@ -311,7 +311,7 @@ struct boss_kalecgos : public BossAI
                 case EVENT_OUTRO_START:
                     events.Reset();
                     events.SetPhase(PHASE_OUTRO);
-                    me->setRegeneratingHealth(false);
+                    me->SetRegenerateHealth(false);
                     me->SetReactState(REACT_PASSIVE);
                     me->InterruptNonMeleeSpells(true);
                     me->RemoveAllAttackers();
@@ -467,7 +467,7 @@ struct boss_sathrovarr : public BossAI
         Talk(SAY_SATH_AGGRO);
     }
 
-    void EnterEvadeMode(EvadeReason why)
+    void EnterEvadeMode(EvadeReason why) override
     {
         if (Creature* kalecgos = instance->GetCreature(DATA_KALECGOS_DRAGON))
             kalecgos->AI()->EnterEvadeMode(why);
